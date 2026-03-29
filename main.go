@@ -31,7 +31,7 @@ func main() {
 	http.HandleFunc("/api/v1/cpu", spikeCPU)
 
 	log.Printf("Server running on Port %s \n", port)
-	err = http.ListenAndServe("127.0.0.1:"+port, nil)
+	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
