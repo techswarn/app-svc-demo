@@ -28,7 +28,7 @@ func main() {
 	http.HandleFunc("/api/v1/countries", getCountries)
 
 	log.Printf("Server running on Port %s \n", port)
-	err = http.ListenAndServe(":"+port, nil)
+	err = http.ListenAndServe("127.0.0.1:"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
