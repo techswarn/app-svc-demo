@@ -7,6 +7,8 @@ import (
 	"log"
 	"encoding/json"
 	"github.com/techswarn/test/database"
+	"runtime"
+	"time"
 )
 
 var db *database.DB
@@ -26,9 +28,10 @@ func main() {
 	})
 
 	http.HandleFunc("/api/v1/countries", getCountries)
+	http.HandleFunc("/api/v1/cpu", spikeCPU)
 
 	log.Printf("Server running on Port %s \n", port)
-	err = http.ListenAndServe(":"+port, nil)
+	err = http.ListenAndServe("127.0.0.1:"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,4 +59,29 @@ func getCountries(w http.ResponseWriter, r *http.Request) {
 
 	// Encode countries to JSON and send response
 	json.NewEncoder(w).Encode(countries)
+}
+
+func spikeCPU(w http.ResponseWriter, r *http.Request) {
+
+	done := make(chan int)
+
+	for i := 0; i < runtime.NumCPU(); i++ {
+
+		go func() {
+				for {
+					select {
+					case <-done:
+						log.Printf("CPU count: %d \n", runtime.NumCPU())
+						log.Printf("GO routine count: %d \n", runtime.NumGoroutine())
+						return
+					default:
+					}
+				}
+		}()
+	}
+	time.Sleep(time.Second * 10)
+	close(done)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
