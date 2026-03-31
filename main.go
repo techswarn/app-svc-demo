@@ -22,7 +22,7 @@ func main() {
 		port = "8081"
 	}
 
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/api/v1/", indexHandler)
 	http.HandleFunc("/api/v1/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -35,6 +35,7 @@ func main() {
 		json.NewEncoder(w).Encode(map[string]string{"status": "unhealthy"})
 	})
 	http.HandleFunc("/api/v1/deadlock", triggerDeadlock)
+	http.HandleFunc("/api/v1/live", deadlockHandler)
 	http.HandleFunc("/api/v1/countries", getCountries)
 	http.HandleFunc("/api/v1/cpu", spikeCPU)
 
@@ -45,6 +46,11 @@ func main() {
 	}
 }
 
+func deadlockHandler(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	defer mu.Unlock()
+	fmt.Fprintf(w, "Request handled")
+}
 
 func indexHandler (w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Available endpoints:\n- /api/v1/countries")
