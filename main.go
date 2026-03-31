@@ -26,7 +26,12 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 	})
-
+	http.HandleFunc("/api/v1/healthfail", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusServiceUnavailable)
+		os.Exit(1)
+		json.NewEncoder(w).Encode(map[string]string{"status": "unhealthy"})
+	})
 	http.HandleFunc("/api/v1/countries", getCountries)
 	http.HandleFunc("/api/v1/cpu", spikeCPU)
 
