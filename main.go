@@ -49,7 +49,9 @@ func main() {
 func deadlockHandler(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
-	fmt.Fprintf(w, "Request handled")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
 
 func indexHandler (w http.ResponseWriter, r *http.Request) {
