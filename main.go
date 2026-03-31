@@ -9,9 +9,11 @@ import (
 	"github.com/techswarn/test/database"
 	"runtime"
 	"time"
+	"sync"
 )
 
 var db *database.DB
+var mu sync.Mutex
 func main() {
 	var err error
 	port  := os.Getenv("PORT")
@@ -32,6 +34,7 @@ func main() {
 		os.Exit(1)
 		json.NewEncoder(w).Encode(map[string]string{"status": "unhealthy"})
 	})
+	http.HandleFunc("/api/v1/deadlock", triggerDeadlock)
 	http.HandleFunc("/api/v1/countries", getCountries)
 	http.HandleFunc("/api/v1/cpu", spikeCPU)
 
@@ -89,4 +92,10 @@ func spikeCPU(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+}
+
+func triggerDeadlock(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	fmt.Println("Mutex locked forever")
+	select {} // infinite block
 }
