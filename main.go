@@ -17,11 +17,11 @@ var mu sync.Mutex
 func main() {
 	var err error
 	port  := os.Getenv("PORT")
-
+    fmt.Println(port)
 	if port == "" {
 		port = "8081"
 	}
-
+    fmt.Println(port)
 	http.HandleFunc("/api/v1/", indexHandler)
 	http.HandleFunc("/api/v1/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
