@@ -17,11 +17,17 @@ var mu sync.Mutex
 func main() {
 	var err error
 	port  := os.Getenv("PORT")
-    fmt.Println(port)
+   //fmt.Println(port)
 	if port == "" {
 		port = "8081"
 	}
-    fmt.Println(port)
+    fmt.Printf("Waiting for database to be ready... \n")
+	time.Sleep(time.Second * 90)
+	db, err = database.NewCon() 
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	http.HandleFunc("/api/v1/", indexHandler)
 	http.HandleFunc("/api/v1/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -61,12 +67,7 @@ func indexHandler (w http.ResponseWriter, r *http.Request) {
 func getCountries(w http.ResponseWriter, r *http.Request) {
 	// Set content type to JSON
 	w.Header().Set("Content-Type", "application/json")
-	var err error
-	db, err = database.NewCon() 
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+
 	countries, err := db.GetCountries()
 	if err != nil {
 		http.Error(w, `{"error": "Failed to fetch countries"}`, http.StatusInternalServerError)
