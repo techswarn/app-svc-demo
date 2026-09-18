@@ -1,3 +1,11 @@
+databases:
+- cluster_name: test
+  db_name: defaultdb
+  db_user: doadmin
+  engine: MYSQL
+  name: test
+  production: true
+  version: "8"
 alerts:
 - rule: DEPLOYMENT_FAILED
 - rule: DOMAIN_FAILED
@@ -14,6 +22,23 @@ name: vpc-test-actions
 region: blr
 services:
 - environment_slug: go
+  envs:
+  - key: DATABASE_USER
+    scope: RUN_TIME
+    type: SECRET
+    value: ${test.USERNAME}
+  - key: DATABASE_PASSWORD
+    scope: RUN_TIME
+    type: SECRET
+    value: ${test.PASSWORD}
+  - key: DATABASE_ADDR
+    scope: RUN_TIME
+    type: SECRET
+    value: ${test.HOSTNAME}
+  - key: DATABASE_DBNAME
+    scope: RUN_TIME
+    type: SECRET
+    value: ${test.DATABASE}
   github:
     branch: main
     repo: techswarn/app-svc-demo
