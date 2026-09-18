@@ -16,7 +16,7 @@ services:
 - environment_slug: go
   github:
     branch: main
-    repo: https://github.com/techswarn/app-svc-demo
+    repo: techswarn/app-svc-demo
   http_port: 8081
   instance_count: 2
   instance_size_slug: apps-s-1vcpu-1gb
