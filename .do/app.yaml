@@ -6,6 +6,8 @@ databases:
   name: test
   production: true
   version: "8"
+vpc:
+  id: e29d3252-56d1-4565-8e43-98849bbc4752
 alerts:
 - rule: DEPLOYMENT_FAILED
 - rule: DOMAIN_FAILED
@@ -46,5 +48,3 @@ services:
   instance_count: 2
   instance_size_slug: apps-s-1vcpu-1gb
   name: api
-  vpc:
-    id: e29d3252-56d1-4565-8e43-98849bbc4752
