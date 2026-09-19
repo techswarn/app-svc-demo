@@ -46,6 +46,11 @@ func NewCon() (*DB, error) {
     cfg.Net = config.proto
     cfg.Addr = config.hostname
     cfg.DBName = config.dbname
+	fmt.Printf("db config: %#v", cfg)
+	fmt.Printf("DATABASE_USER: %s", os.Getenv("DATABASE_USER"))
+	fmt.Printf("DATABASE_PASSWORD: %s", os.Getenv("DATABASE_PASSWORD"))
+	fmt.Printf("DATABASE_ADDR: %s", os.Getenv("DATABASE_ADDR"))
+	fmt.Printf("DATABASE_DBNAME: %s", os.Getenv("DATABASE_DBNAME"))
 
     db, err := sql.Open("mysql", cfg.FormatDSN())
     if err != nil {
