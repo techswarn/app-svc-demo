@@ -29,7 +29,7 @@ type DB struct {
 }
 
 func NewCon() (*DB, error) {
-
+	fmt.Println("In newCon")
 	config := &Config{
 		user: os.Getenv("DATABASE_USER"),
 	    password: os.Getenv("DATABASE_PASSWORD"),
