@@ -37,7 +37,7 @@ func NewCon() (*DB, error) {
 	    hostname: os.Getenv("DATABASE_ADDR"),
 	    dbname: os.Getenv("DATABASE_DBNAME"),
 	}
-
+	fmt.Println("In newCon after config")
 	fmt.Printf("db config: %#v", config)
 
 	cfg := mysql.NewConfig()
