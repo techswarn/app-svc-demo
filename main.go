@@ -22,7 +22,7 @@ func main() {
 		port = "8081"
 	}
     fmt.Printf("Waiting for database to be ready... \n")
-	time.Sleep(time.Second * 2)
+	//time.Sleep(time.Second * 2)
 	db, err = database.NewCon()
 	if err != nil {
 		fmt.Println(err)
